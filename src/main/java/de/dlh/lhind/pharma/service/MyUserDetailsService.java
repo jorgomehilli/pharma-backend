@@ -1,5 +1,6 @@
 package de.dlh.lhind.pharma.service;
 
+import de.dlh.lhind.pharma.dto.UserDTO;
 import de.dlh.lhind.pharma.models.Roles;
 import de.dlh.lhind.pharma.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,11 @@ public class MyUserDetailsService implements UserDetailsService {
                 mapRolesToAuthorities(user.getRoles()));
 
        // return new User("foo@foo.com", "12345678", new ArrayList<>());
+    }
+
+    public String getCurrentUserName(String username){
+        de.dlh.lhind.pharma.models.User user = userRepository.findByEmail(username);
+        return user.getFirstName();
     }
 
     private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Roles> roles) {
