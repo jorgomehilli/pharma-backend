@@ -16,7 +16,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin(origins = "http://localhost:4200")
+import java.util.List;
+
+@CrossOrigin(origins = "*")
 @RestController
 public class UserController {
     @Autowired
@@ -58,4 +60,10 @@ public class UserController {
         return ResponseEntity.ok(new AuthenticationResponse(jwt, firstName));
 
     }
+
+    @RequestMapping(value = "/users", method = RequestMethod.GET)
+    public List<User> getAllUsers (){
+        return userService.getAllUsers();
+    }
+
 }

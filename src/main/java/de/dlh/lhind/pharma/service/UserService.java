@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 
 @Service
 public class UserService{
@@ -50,5 +51,9 @@ public class UserService{
         if(!roleRepository.findById(2L).isPresent()) {
             roleRepository.save(new Roles("ROLE_ADMIN"));
         }
+    }
+
+    public List<User> getAllUsers(){
+        return userRepository.findAll();
     }
 }
