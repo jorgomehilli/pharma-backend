@@ -1,6 +1,7 @@
 package de.dlh.lhind.pharma.service;
 
 import de.dlh.lhind.pharma.models.Roles;
+import de.dlh.lhind.pharma.models.User;
 import de.dlh.lhind.pharma.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -41,9 +42,9 @@ public class MyUserDetailsService implements UserDetailsService {
         return user.getFirstName();
     }
 
-    public Long getCurrentUserId() {
+    public User getCurrentUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        return userRepository.findByEmail(auth.getName()).getUserId();
+        return userRepository.findByEmail(auth.getName());
     }
 
     public String getCurrentlyLoggedInUser() {

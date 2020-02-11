@@ -9,6 +9,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query(value = "SELECT * FROM users  WHERE email = :email AND to_date IS NULL",
             nativeQuery = true)
+//    @Query(value = "select u from User u  where u.email = :email and u.toDate is null")
     User findByEmail(@Param("email") String email);
 
 

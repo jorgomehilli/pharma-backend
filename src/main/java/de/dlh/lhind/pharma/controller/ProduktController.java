@@ -30,4 +30,9 @@ public class ProduktController {
        return produktService.addToCart(productId);
     }
 
+    @GetMapping("/users/cart")
+    public List<Object> getCartItems(){
+        return produktService.getCurrentUserItems();
+    }
+
 }

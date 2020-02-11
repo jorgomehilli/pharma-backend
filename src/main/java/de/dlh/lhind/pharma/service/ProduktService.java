@@ -35,15 +35,18 @@ public class ProduktService {
     }
 
     public Cart_Items addToCart(Long productId){
-        Long currentId = myUserDetailsService.getCurrentUserId();
-        User user = userRepository.findByEmail(myUserDetailsService.getCurrentlyLoggedInUser());
+
+        User user = myUserDetailsService.getCurrentUser();
         Cart_Items cart_item = new Cart_Items();
         cart_item.setUser(user);
         Produkt product = produktRepository.getOne(productId);
-        System.out.println((product.getName()));
         cart_item.setProduct(product);
         cart_item.setQuantity(1);
        return cartItemsRepository.save(cart_item);
 
+    }
+
+    public List<Object> getCurrentUserItems(){
+        return cartItemsRepository.getCurrentUserItems(myUserDetailsService.getCurrentUser().getUserId());
     }
 }

@@ -35,7 +35,8 @@ public class UserService{
         user.setLastName(userDTO.getLastName());
         user.setEmail(userDTO.getEmail());
         user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-        //user.setPassword(userDTO.getPassword());
+
+
         verifyRoles();
         user.setRoles(new HashSet<>(Arrays.asList(roleRepository.getOne(1L))));
         user.setCreatedAt(new Date());
