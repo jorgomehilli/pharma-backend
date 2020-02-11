@@ -11,7 +11,8 @@ import java.util.*;
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = "email"), name = "users")
 @EntityListeners(AuditingEntityListener.class)
-public class User {
+
+    public class User {
 
     public User(){ }
 

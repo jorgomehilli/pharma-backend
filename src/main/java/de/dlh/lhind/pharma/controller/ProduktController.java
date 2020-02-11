@@ -1,5 +1,6 @@
 package de.dlh.lhind.pharma.controller;
 
+import de.dlh.lhind.pharma.models.Cart_Items;
 import de.dlh.lhind.pharma.models.Produkt;
 import de.dlh.lhind.pharma.service.ProduktService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,12 @@ public class ProduktController {
     @RequestMapping(value = "/hello", method = RequestMethod.GET)
     public String Greeting(){
         return "Hello Boss";
+    }
+
+
+    @PostMapping("/cart/add")
+    public Cart_Items addToCart(@RequestBody Long productId){
+       return produktService.addToCart(productId);
     }
 
 }

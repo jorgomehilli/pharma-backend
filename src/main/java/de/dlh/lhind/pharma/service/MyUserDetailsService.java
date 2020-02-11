@@ -1,18 +1,17 @@
 package de.dlh.lhind.pharma.service;
 
-import de.dlh.lhind.pharma.dto.UserDTO;
 import de.dlh.lhind.pharma.models.Roles;
 import de.dlh.lhind.pharma.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -40,6 +39,16 @@ public class MyUserDetailsService implements UserDetailsService {
     public String getCurrentUserName(String username){
         de.dlh.lhind.pharma.models.User user = userRepository.findByEmail(username);
         return user.getFirstName();
+    }
+
+    public Long getCurrentUserId() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return userRepository.findByEmail(auth.getName()).getUserId();
+    }
+
+    public String getCurrentlyLoggedInUser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return auth.getName();
     }
 
     private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Roles> roles) {
