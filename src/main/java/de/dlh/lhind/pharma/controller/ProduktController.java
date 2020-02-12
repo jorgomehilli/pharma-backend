@@ -1,5 +1,6 @@
 package de.dlh.lhind.pharma.controller;
 
+import de.dlh.lhind.pharma.dto.CartItemDTO;
 import de.dlh.lhind.pharma.models.Cart_Items;
 import de.dlh.lhind.pharma.models.Produkt;
 import de.dlh.lhind.pharma.service.ProduktService;
@@ -31,7 +32,7 @@ public class ProduktController {
     }
 
     @GetMapping("/users/cart")
-    public List<Object> getCartItems(){
+    public List<CartItemDTO> getCartItems(){
         return produktService.getCurrentUserItems();
     }
 

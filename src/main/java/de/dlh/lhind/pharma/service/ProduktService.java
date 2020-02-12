@@ -1,5 +1,7 @@
 package de.dlh.lhind.pharma.service;
 
+import de.dlh.lhind.pharma.dto.CartItemDTO;
+import de.dlh.lhind.pharma.dto.mappers.DTOMappers;
 import de.dlh.lhind.pharma.models.Cart_Items;
 import de.dlh.lhind.pharma.models.Produkt;
 import de.dlh.lhind.pharma.models.User;
@@ -9,9 +11,8 @@ import de.dlh.lhind.pharma.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ProduktService {
@@ -26,6 +27,9 @@ public class ProduktService {
 
     @Autowired
     private CartItemsRepository cartItemsRepository;
+
+    @Autowired
+    private DTOMappers dtoMappers;
 
 
 
@@ -46,7 +50,10 @@ public class ProduktService {
 
     }
 
-    public List<Object> getCurrentUserItems(){
-        return cartItemsRepository.getCurrentUserItems(myUserDetailsService.getCurrentUser().getUserId());
+
+    public List<CartItemDTO> getCurrentUserItems(){
+        return cartItemsRepository.findByUserId(myUserDetailsService.getCurrentUser().getUserId()).stream()
+                .map(ci -> dtoMappers.cartItemDTOMapper(ci))
+                .collect(Collectors.toList());
     }
 }
