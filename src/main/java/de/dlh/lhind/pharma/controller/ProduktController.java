@@ -36,4 +36,20 @@ public class ProduktController {
         return produktService.getCurrentUserItems();
     }
 
-}
+    @RequestMapping(value = "/cart/delete/{id}", method = RequestMethod.DELETE)
+    public void deleteCartItem(@PathVariable Long id){
+    produktService.deleteCartItem(id);
+    }
+
+    @GetMapping("/cart/increment/{id}")
+    public void incrementQuantity(@PathVariable Long id){
+    produktService.incrementQuantity(id);
+    }
+
+    @GetMapping("/cart/decrement/{id}")
+    public void decrementQuantity(@PathVariable Long id){
+        produktService.decrementQuantity(id);
+    }
+
+    }
+

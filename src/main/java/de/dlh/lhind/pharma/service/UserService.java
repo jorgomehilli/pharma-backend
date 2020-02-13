@@ -35,10 +35,8 @@ public class UserService{
         user.setLastName(userDTO.getLastName());
         user.setEmail(userDTO.getEmail());
         user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-
-
         verifyRoles();
-        user.setRoles(new HashSet<>(Arrays.asList(roleRepository.getOne(1L))));
+        user.setRoles(new HashSet<>(Arrays.asList(roleRepository.getOne(6L))));
         user.setCreatedAt(new Date());
 
         return userRepository.save(user);
@@ -46,7 +44,7 @@ public class UserService{
     }
 
     private void verifyRoles(){
-        if(!roleRepository.findById(1L).isPresent()) {
+        if(!roleRepository.findById(6L).isPresent()) {
             roleRepository.save(new Roles("ROLE_USER"));
         }
         if(!roleRepository.findById(2L).isPresent()) {

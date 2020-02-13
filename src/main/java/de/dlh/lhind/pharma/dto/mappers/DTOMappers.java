@@ -8,8 +8,11 @@ import org.springframework.stereotype.Service;
 public class DTOMappers {
 
     public CartItemDTO cartItemDTOMapper(Cart_Items cart_items) {
-        return new CartItemDTO(cart_items.getProduct().getName(),
+
+        return new CartItemDTO( cart_items.getId(),
+                                cart_items.getProduct().getName(),
                                 cart_items.getProduct().getPrice(),
-                                cart_items.getQuantity());
+                                cart_items.getQuantity(),
+                                cart_items.getProduct().getImgPath());
     }
 }

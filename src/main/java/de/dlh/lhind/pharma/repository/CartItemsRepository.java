@@ -18,4 +18,8 @@ public interface CartItemsRepository extends JpaRepository<Cart_Items,Long> {
 
     @Query(value = "SELECT * FROM cart_items WHERE user_id = :userId", nativeQuery = true)
     public List<Cart_Items> findByUserId(@Param("userId") Long userId);
+
+    @Query(value = "DELETE FROM cart_items WHERE id = :id", nativeQuery = true)
+    public void deleteItem(@Param("id") Long id);
+
 }

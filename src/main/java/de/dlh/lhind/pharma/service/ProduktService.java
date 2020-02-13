@@ -56,4 +56,22 @@ public class ProduktService {
                 .map(ci -> dtoMappers.cartItemDTOMapper(ci))
                 .collect(Collectors.toList());
     }
+
+    public void deleteCartItem (Long cartItemId){
+        cartItemsRepository.deleteItem(cartItemId);
+    }
+
+    public void incrementQuantity(Long cartItemId){
+        Cart_Items cart_item = cartItemsRepository.getOne(cartItemId);
+        Integer newQuantity = cart_item.getQuantity() + 1;
+        cart_item.setQuantity(newQuantity);
+        cartItemsRepository.save(cart_item);
+    }
+
+    public void decrementQuantity(Long cartItemId){
+        Cart_Items cart_item = cartItemsRepository.getOne(cartItemId);
+        Integer newQuantity = cart_item.getQuantity() - 1;
+        cart_item.setQuantity(newQuantity);
+        cartItemsRepository.save(cart_item);
+    }
 }
