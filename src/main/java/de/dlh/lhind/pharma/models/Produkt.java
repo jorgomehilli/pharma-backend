@@ -4,7 +4,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
-import java.awt.*;
 import java.util.Date;
 
 @Entity
@@ -23,7 +22,7 @@ public class Produkt {
     private String name;
 
     @Column(nullable = false, name = "price")
-    @NotEmpty
+    //@NotEmpty
     private Integer price;
 
     @Column(nullable = false, name = "img")
@@ -31,7 +30,7 @@ public class Produkt {
     private String imgPath;
 
     @Column(nullable = false, name = "quantity")
-    @NotEmpty
+    //@NotEmpty
     private  Integer quantity;
 
     @Column(name = "to_date")

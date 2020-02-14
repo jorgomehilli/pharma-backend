@@ -40,7 +40,6 @@ public class UserService{
         user.setCreatedAt(new Date());
 
         return userRepository.save(user);
-
     }
 
     private void verifyRoles(){

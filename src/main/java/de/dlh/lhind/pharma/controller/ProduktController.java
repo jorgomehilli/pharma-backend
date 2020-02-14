@@ -1,6 +1,7 @@
 package de.dlh.lhind.pharma.controller;
 
 import de.dlh.lhind.pharma.dto.CartItemDTO;
+import de.dlh.lhind.pharma.dto.ProductDTO;
 import de.dlh.lhind.pharma.models.Cart_Items;
 import de.dlh.lhind.pharma.models.Produkt;
 import de.dlh.lhind.pharma.service.ProduktService;
@@ -49,6 +50,18 @@ public class ProduktController {
     @GetMapping("/cart/decrement/{id}")
     public void decrementQuantity(@PathVariable Long id){
         produktService.decrementQuantity(id);
+    }
+
+    @RequestMapping(value = "/products/delete/{id}")
+    public void deleteProduct(@PathVariable Long id){
+        produktService.deleteProduct(id);
+    }
+
+
+
+    @PostMapping("/products/add")
+    public Produkt addToCart(@RequestBody ProductDTO productDTO){
+        return produktService.addProduct(productDTO);
     }
 
     }
