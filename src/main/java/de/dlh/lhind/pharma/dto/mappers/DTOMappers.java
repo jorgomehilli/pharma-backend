@@ -9,10 +9,14 @@ public class DTOMappers {
 
     public CartItemDTO cartItemDTOMapper(Cart_Items cart_items) {
 
+        //if(cart_items.getProduct().getToDate() == null)
+
         return new CartItemDTO( cart_items.getId(),
                                 cart_items.getProduct().getName(),
                                 cart_items.getProduct().getPrice(),
                                 cart_items.getQuantity(),
                                 cart_items.getProduct().getImgPath());
+
     }
+
 }

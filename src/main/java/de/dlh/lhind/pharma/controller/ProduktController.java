@@ -57,6 +57,12 @@ public class ProduktController {
         produktService.deleteProduct(id);
     }
 
+    @RequestMapping(value = "/products/update/{id}", method = RequestMethod.PUT)
+    public void updateProduct(@RequestBody ProductDTO productDTO,
+                              @PathVariable Long id){
+    produktService.updateProduct(productDTO, id);
+    }
+
 
 
     @PostMapping("/products/add")

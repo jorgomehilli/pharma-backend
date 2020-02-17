@@ -42,6 +42,48 @@ public class UserService{
         return userRepository.save(user);
     }
 
+    public User addUser(UserDTO userDTO){
+
+        User user = new User();
+
+        user.setFirstName(userDTO.getFirstName());
+        user.setLastName(userDTO.getLastName());
+        user.setEmail(userDTO.getEmail());
+        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        verifyRoles();
+
+        if (userDTO.getRole().equals("ROLE_USER")){
+            user.setRoles(new HashSet<>(Arrays.asList(roleRepository.getOne(6L))));
+
+        } else{
+            user.setRoles(new HashSet<>(Arrays.asList(roleRepository.getOne(2L))));
+        }
+        user.setCreatedAt(new Date());
+
+        return userRepository.save(user);
+    }
+
+    public void deleteUser(Long id){
+        User user = userRepository.findById(id).orElse(null);
+        user.setToDate(new Date());
+        userRepository.save(user);
+    }
+
+    public void updateUser(UserDTO userDTO, Long id){
+        User user = userRepository.findById(id).orElse(null);
+        user.setFirstName(userDTO.getFirstName());
+        user.setLastName(userDTO.getLastName());
+        user.setEmail(userDTO.getEmail());
+        if (userDTO.getRole().equals("ROLE_USER")){
+            user.setRoles(new HashSet<>(Arrays.asList(roleRepository.getOne(6L))));
+
+        } else{
+            user.setRoles(new HashSet<>(Arrays.asList(roleRepository.getOne(2L))));
+        }
+        userRepository.save(user);
+
+    }
+
     private void verifyRoles(){
         if(!roleRepository.findById(6L).isPresent()) {
             roleRepository.save(new Roles("ROLE_USER"));

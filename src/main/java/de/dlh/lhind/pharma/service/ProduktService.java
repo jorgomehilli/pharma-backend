@@ -68,8 +68,6 @@ public class ProduktService {
     //@Transactional
     public void deleteProduct(Long id){
 
-
-
       Produkt produkt = produktRepository.findById(id).orElse(null);
       produkt.setToDate(new Date());
       produktRepository.save(produkt);
@@ -86,8 +84,17 @@ public class ProduktService {
         return produktRepository.save(produkt);
     }
 
+    public void updateProduct(ProductDTO productDTO, Long id){
+        Produkt produkt = produktRepository.findById(id).orElse(null);
+        produkt.setName(productDTO.getName());
+        produkt.setPrice((int) productDTO.getPrice());
+        produkt.setImgPath(productDTO.getImgPath());
+        produktRepository.save(produkt);
+    }
+
     public List<CartItemDTO> getCurrentUserItems(){
-        return cartItemsRepository.findByUserId(myUserDetailsService.getCurrentUser().getUserId()).stream()
+        return cartItemsRepository.findByUserId(myUserDetailsService.getCurrentUser().getUserId()).stream().filter(ci ->
+        ci.getProduct().getToDate()==null)
                 .map(ci -> dtoMappers.cartItemDTOMapper(ci))
                 .collect(Collectors.toList());
     }

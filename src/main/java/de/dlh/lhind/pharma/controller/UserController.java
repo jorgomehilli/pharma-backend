@@ -37,6 +37,24 @@ public class UserController {
     return userService.signup(userDTO);
     }
 
+    @PostMapping("/users/add")
+    public User addUserFromAdmin(@RequestBody UserDTO userDTO){
+       return userService.addUser(userDTO);
+    }
+
+    @RequestMapping(value = "/users/update/{id}", method = RequestMethod.PUT)
+    public void updateProduct(@RequestBody UserDTO userDTO,
+                              @PathVariable Long id){
+            userService.updateUser(userDTO, id);
+    }
+
+    @RequestMapping(value = "/users/delete/{id}", method = RequestMethod.DELETE)
+    public void deleteUser(@PathVariable Long id){
+    userService.deleteUser(id);
+    }
+
+
+
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
 
