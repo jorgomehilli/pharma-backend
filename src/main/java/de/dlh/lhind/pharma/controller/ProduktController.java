@@ -63,6 +63,11 @@ public class ProduktController {
     produktService.updateProduct(productDTO, id);
     }
 
+    @RequestMapping(value = "/cart/purchase/", method = RequestMethod.DELETE)
+    public void purchaseProducts(){
+    produktService.purchaseCartItems();
+    }
+
 
 
     @PostMapping("/products/add")

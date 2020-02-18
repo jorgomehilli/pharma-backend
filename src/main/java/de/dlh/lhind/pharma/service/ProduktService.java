@@ -100,6 +100,12 @@ public class ProduktService {
     }
 
     @Transactional
+    public void purchaseCartItems(){
+        Long id = this.myUserDetailsService.getCurrentUser().getUserId();
+        cartItemsRepository.purchaseCartItems(id);
+    }
+
+    @Transactional
     public void deleteCartItem (Long cartItemId){
         cartItemsRepository.deleteItem(cartItemId);
     }
