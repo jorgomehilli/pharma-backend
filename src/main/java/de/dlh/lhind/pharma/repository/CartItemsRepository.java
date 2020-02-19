@@ -31,4 +31,7 @@ public interface CartItemsRepository extends JpaRepository<Cart_Items,Long> {
     @Query(value ="DELETE FROM cart_items WHERE user_id=:userId", nativeQuery = true)
     public void purchaseCartItems(@Param("userId") Long userId);
 
+    @Query(value = "SELECT quantity from cart_items WHERE user_id =: userId", nativeQuery = true)
+    public List<Integer>getCurrentItemsQuantities(@Param("userId") Long userId);
+
 }

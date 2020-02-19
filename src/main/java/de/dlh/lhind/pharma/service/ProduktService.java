@@ -51,7 +51,7 @@ public class ProduktService {
             if(existingCartItem.getQuantity()<5){
             incrementQuantity(existingCartItem.getId());
             return existingCartItem;}
-            else{return null;}
+            else {return null;}
         } else {
 
             User user = myUserDetailsService.getCurrentUser();
@@ -78,8 +78,7 @@ public class ProduktService {
         produkt.setName(productDTO.getName());
         produkt.setPrice((int)productDTO.getPrice());
         produkt.setImgPath(productDTO.getImgPath());
-        produkt.setQuantity(40);
-        System.out.println(produkt.getQuantity());
+        produkt.setQuantity(productDTO.getQuantity());
         produkt.setToDate(null);
         return produktRepository.save(produkt);
     }
@@ -88,6 +87,7 @@ public class ProduktService {
         Produkt produkt = produktRepository.findById(id).orElse(null);
         produkt.setName(productDTO.getName());
         produkt.setPrice((int) productDTO.getPrice());
+        produkt.setQuantity(productDTO.getQuantity());
         produkt.setImgPath(productDTO.getImgPath());
         produktRepository.save(produkt);
     }
@@ -102,6 +102,9 @@ public class ProduktService {
     @Transactional
     public void purchaseCartItems(){
         Long id = this.myUserDetailsService.getCurrentUser().getUserId();
+        List<Cart_Items> items = cartItemsRepository.findByUserId(id);
+        items.forEach(item -> produktRepository.LowerProductQuantityOnPurchase(item.getQuantity(),
+                item.getProduct().getId()));
         cartItemsRepository.purchaseCartItems(id);
     }
 

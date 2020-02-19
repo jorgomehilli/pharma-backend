@@ -4,11 +4,13 @@ public class ProductDTO {
 
     public String name;
     public Integer price;
+    public Integer quantity;
     public String imgPath;
 
-    public ProductDTO(String name, Integer price, String imgPath) {
+    public ProductDTO(String name, Integer price, Integer quantity, String imgPath) {
         this.name = name;
         this.price = price;
+        this.quantity = quantity;
         this.imgPath = imgPath;
     }
 
@@ -20,12 +22,20 @@ public class ProductDTO {
         this.name = name;
     }
 
-    public double getPrice() {
+    public Integer getPrice() {
         return price;
     }
 
     public void setPrice(Integer price) {
         this.price = price;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
     }
 
     public String getImgPath() {

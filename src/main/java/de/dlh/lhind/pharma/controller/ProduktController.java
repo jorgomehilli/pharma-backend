@@ -26,7 +26,6 @@ public class ProduktController {
         return "Hello Boss";
     }
 
-
     @PostMapping("/cart/add")
     public Cart_Items addToCart(@RequestBody Long productId){
        return produktService.addToCart(productId);
