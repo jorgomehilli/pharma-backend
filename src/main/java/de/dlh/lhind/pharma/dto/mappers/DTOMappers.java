@@ -15,7 +15,8 @@ public class DTOMappers {
                                 cart_items.getProduct().getName(),
                                 cart_items.getProduct().getPrice(),
                                 cart_items.getQuantity(),
-                                cart_items.getProduct().getImgPath());
+                                cart_items.getProduct().getImgPath(),
+                                cart_items.getProduct().getQuantity());
 
     }
 

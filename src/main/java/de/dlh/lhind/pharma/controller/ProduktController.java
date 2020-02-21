@@ -26,6 +26,11 @@ public class ProduktController {
         return "Hello Boss";
     }
 
+    @RequestMapping(value = "/cart/products/number", method = RequestMethod.GET)
+    public Integer getCartItemsNumber(){
+       return produktService.getCurrentUserItems().size();
+    }
+
     @PostMapping("/cart/add")
     public Cart_Items addToCart(@RequestBody Long productId){
        return produktService.addToCart(productId);
@@ -66,7 +71,6 @@ public class ProduktController {
     public void purchaseProducts(){
     produktService.purchaseCartItems();
     }
-
 
 
     @PostMapping("/products/add")
