@@ -2,6 +2,8 @@ package de.dlh.lhind.pharma.controller;
 
 
 import de.dlh.lhind.pharma.dto.UserDTO;
+import de.dlh.lhind.pharma.exception.ErrorMessages;
+import de.dlh.lhind.pharma.exception.UserServiceException;
 import de.dlh.lhind.pharma.models.AuthenticationRequest;
 import de.dlh.lhind.pharma.models.AuthenticationResponse;
 import de.dlh.lhind.pharma.models.User;
@@ -33,7 +35,7 @@ public class UserController {
     private MyUserDetailsService userDetailsService;
 
     @PostMapping("/users/signup")
-    public User addUser(@RequestBody UserDTO userDTO){
+    public User addUser(@RequestBody UserDTO userDTO) throws UserServiceException {
     return userService.signup(userDTO);
     }
 
@@ -64,7 +66,8 @@ public class UserController {
             );
         }
         catch (BadCredentialsException e) {
-            throw new Exception("Incorrect username or password", e);
+            //throw new Exception("Incorrect username or password", e);
+            throw new UserServiceException(ErrorMessages.BAD_CREDENTIALS.getErrorMessage());
         }
 
 

@@ -3,6 +3,8 @@ package de.dlh.lhind.pharma.service;
 import de.dlh.lhind.pharma.dto.CartItemDTO;
 import de.dlh.lhind.pharma.dto.ProductDTO;
 import de.dlh.lhind.pharma.dto.mappers.DTOMappers;
+import de.dlh.lhind.pharma.exception.ErrorMessages;
+import de.dlh.lhind.pharma.exception.UserServiceException;
 import de.dlh.lhind.pharma.models.Cart_Items;
 import de.dlh.lhind.pharma.models.Produkt;
 import de.dlh.lhind.pharma.models.User;
@@ -11,7 +13,6 @@ import de.dlh.lhind.pharma.repository.ProduktRepository;
 import de.dlh.lhind.pharma.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
@@ -38,7 +39,23 @@ public class ProduktService {
 
     public List<Produkt> findAll(){
 
+        List<Cart_Items> currentUserItems;
+        List<Produkt> allProductsAvailable;
+        if(myUserDetailsService.getCurrentUser() == null){
+
         return produktRepository.findAll();
+        } else
+
+            allProductsAvailable = produktRepository.findAll();
+           currentUserItems  = cartItemsRepository.findByUserId(myUserDetailsService.getCurrentUser().getUserId());
+           currentUserItems.forEach(ci -> {
+                Integer index;
+            index  = allProductsAvailable.indexOf(ci.getProduct());
+            Integer quantityAvailableForThisUser = allProductsAvailable.get(index).getQuantity();
+            quantityAvailableForThisUser= quantityAvailableForThisUser - ci.getQuantity();
+               allProductsAvailable.get(index).setQuantity(quantityAvailableForThisUser);
+           });
+    return allProductsAvailable;
     }
 
     public Cart_Items addToCart(Long productId) {
@@ -103,7 +120,14 @@ public class ProduktService {
     public void purchaseCartItems(){
         Long id = this.myUserDetailsService.getCurrentUser().getUserId();
         List<Cart_Items> items = cartItemsRepository.findByUserId(id);
-        items.forEach(item -> produktRepository.LowerProductQuantityOnPurchase(item.getQuantity(),
+        for (Cart_Items ci : items){
+            if(ci.getProduct().getQuantity() < ci.getQuantity()){
+                throw new UserServiceException(ErrorMessages.PRODUCT_OUT_OF_STOCK.getErrorMessage());
+            }
+        }
+
+        items.forEach(item ->
+                produktRepository.LowerProductQuantityOnPurchase(item.getQuantity(),
                 item.getProduct().getId()));
         cartItemsRepository.purchaseCartItems(id);
     }

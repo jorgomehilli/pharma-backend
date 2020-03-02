@@ -2,6 +2,8 @@ package de.dlh.lhind.pharma.service;
 
 
 import de.dlh.lhind.pharma.dto.UserDTO;
+import de.dlh.lhind.pharma.exception.ErrorMessages;
+import de.dlh.lhind.pharma.exception.UserServiceException;
 import de.dlh.lhind.pharma.models.Roles;
 import de.dlh.lhind.pharma.models.User;
 import de.dlh.lhind.pharma.repository.RoleRepository;
@@ -27,7 +29,7 @@ public class UserService{
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
-    public User signup(UserDTO userDTO){
+    public User signup(UserDTO userDTO) throws UserServiceException {
 
         User user = new User();
 
@@ -38,6 +40,10 @@ public class UserService{
         verifyRoles();
         user.setRoles(new HashSet<>(Arrays.asList(roleRepository.getOne(6L))));
         user.setCreatedAt(new Date());
+
+        if (userRepository.findByEmail(userDTO.getEmail()) != null){
+            throw new UserServiceException(ErrorMessages.EMAIL_TAKEN.getErrorMessage());
+        }
 
         return userRepository.save(user);
     }
