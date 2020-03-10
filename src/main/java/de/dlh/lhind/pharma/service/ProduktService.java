@@ -36,26 +36,25 @@ public class ProduktService {
     private DTOMappers dtoMappers;
 
 
-
-    public List<Produkt> findAll(){
+    public List<Produkt> findAll() {
 
         List<Cart_Items> currentUserItems;
         List<Produkt> allProductsAvailable;
-        if(myUserDetailsService.getCurrentUser() == null){
+        if (myUserDetailsService.getCurrentUser() == null) {
 
-        return produktRepository.findAll();
+            return produktRepository.findAll();
         } else
 
             allProductsAvailable = produktRepository.findAll();
-           currentUserItems  = cartItemsRepository.findByUserId(myUserDetailsService.getCurrentUser().getUserId());
-           currentUserItems.forEach(ci -> {
-                Integer index;
-            index  = allProductsAvailable.indexOf(ci.getProduct());
+        currentUserItems = cartItemsRepository.findByUserId(myUserDetailsService.getCurrentUser().getUserId());
+        currentUserItems.forEach(ci -> {
+            Integer index;
+            index = allProductsAvailable.indexOf(ci.getProduct());
             Integer quantityAvailableForThisUser = allProductsAvailable.get(index).getQuantity();
-            quantityAvailableForThisUser= quantityAvailableForThisUser - ci.getQuantity();
-               allProductsAvailable.get(index).setQuantity(quantityAvailableForThisUser);
-           });
-    return allProductsAvailable;
+            quantityAvailableForThisUser = quantityAvailableForThisUser - ci.getQuantity();
+            allProductsAvailable.get(index).setQuantity(quantityAvailableForThisUser);
+        });
+        return allProductsAvailable;
     }
 
     public Cart_Items addToCart(Long productId) {
@@ -65,11 +64,14 @@ public class ProduktService {
                         .getUserId(), productId);
 
         if (existingCartItem != null) {
-            if(existingCartItem.getQuantity()<5){
-            incrementQuantity(existingCartItem.getId());
-            return existingCartItem;}
-            else {return null;}
-        } else {
+            if (existingCartItem.getQuantity() < 5) {
+                incrementQuantity(existingCartItem.getId());
+                return existingCartItem;
+            } else {
+                return null;
+            }
+        }
+        else {
 
             User user = myUserDetailsService.getCurrentUser();
             Cart_Items cart_item = new Cart_Items();
@@ -83,24 +85,24 @@ public class ProduktService {
     }
 
     //@Transactional
-    public void deleteProduct(Long id){
+    public void deleteProduct(Long id) {
 
-      Produkt produkt = produktRepository.findById(id).orElse(null);
-      produkt.setToDate(new Date());
-      produktRepository.save(produkt);
+        Produkt produkt = produktRepository.findById(id).orElse(null);
+        produkt.setToDate(new Date());
+        produktRepository.save(produkt);
     }
 
-    public Produkt addProduct(ProductDTO productDTO){
+    public Produkt addProduct(ProductDTO productDTO) {
         Produkt produkt = new Produkt();
         produkt.setName(productDTO.getName());
-        produkt.setPrice((int)productDTO.getPrice());
+        produkt.setPrice((int) productDTO.getPrice());
         produkt.setImgPath(productDTO.getImgPath());
         produkt.setQuantity(productDTO.getQuantity());
         produkt.setToDate(null);
         return produktRepository.save(produkt);
     }
 
-    public void updateProduct(ProductDTO productDTO, Long id){
+    public void updateProduct(ProductDTO productDTO, Long id) {
         Produkt produkt = produktRepository.findById(id).orElse(null);
         produkt.setName(productDTO.getName());
         produkt.setPrice((int) productDTO.getPrice());
@@ -109,42 +111,43 @@ public class ProduktService {
         produktRepository.save(produkt);
     }
 
-    public List<CartItemDTO> getCurrentUserItems(){
+    public List<CartItemDTO> getCurrentUserItems() {
         return cartItemsRepository.findByUserId(myUserDetailsService.getCurrentUser().getUserId()).stream().filter(ci ->
-        ci.getProduct().getToDate()==null)
+                ci.getProduct().getToDate() == null)
                 .map(ci -> dtoMappers.cartItemDTOMapper(ci))
                 .collect(Collectors.toList());
     }
 
     @Transactional
-    public void purchaseCartItems(){
+    public void purchaseCartItems() {
         Long id = this.myUserDetailsService.getCurrentUser().getUserId();
         List<Cart_Items> items = cartItemsRepository.findByUserId(id);
-        for (Cart_Items ci : items){
-            if(ci.getProduct().getQuantity() < ci.getQuantity()){
-                throw new CustomException(ci.getProduct().getName() +" is out of stock, remove it  :(");
+        for (Cart_Items ci : items) {
+            if (ci.getProduct().getQuantity() < ci.getQuantity()) {
+                cartItemsRepository.deleteItem(ci.getId());
+                throw new CustomException(ci.getProduct().getName() + " is out of stock :(");
             }
         }
 
         items.forEach(item ->
                 produktRepository.LowerProductQuantityOnPurchase(item.getQuantity(),
-                item.getProduct().getId()));
+                        item.getProduct().getId()));
         cartItemsRepository.purchaseCartItems(id);
     }
 
     @Transactional
-    public void deleteCartItem (Long cartItemId){
+    public void deleteCartItem(Long cartItemId) {
         cartItemsRepository.deleteItem(cartItemId);
     }
 
-    public void incrementQuantity(Long cartItemId){
+    public void incrementQuantity(Long cartItemId) {
         Cart_Items cart_item = cartItemsRepository.getOne(cartItemId);
         Integer newQuantity = cart_item.getQuantity() + 1;
         cart_item.setQuantity(newQuantity);
         cartItemsRepository.save(cart_item);
     }
 
-    public void decrementQuantity(Long cartItemId){
+    public void decrementQuantity(Long cartItemId) {
         Cart_Items cart_item = cartItemsRepository.getOne(cartItemId);
         Integer newQuantity = cart_item.getQuantity() - 1;
         cart_item.setQuantity(newQuantity);

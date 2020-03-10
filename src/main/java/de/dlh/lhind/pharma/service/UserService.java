@@ -98,6 +98,14 @@ public class UserService{
         }
     }
 
+   public Boolean isEmailPresent(String email){
+        User user = userRepository.findByEmail(email);
+        if (user == null){
+            return false;
+        } else
+return true;
+    }
+
     public List<User> getAllUsers(){
         return userRepository.findAll();
     }

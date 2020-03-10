@@ -35,12 +35,12 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests().antMatchers("/authenticate",
+                "/users/email/{email}",
                 "/products",
                 "/users/signup").permitAll()
                 .antMatchers("/users").hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new CorsFilter(), ChannelProcessingFilter.class);
     }
@@ -50,11 +50,6 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
-/*
-    @Bean
-    public PasswordEncoder passwordEncoder1(){
-        return NoOpPasswordEncoder.getInstance();
-    }*/
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {

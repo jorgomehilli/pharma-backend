@@ -87,4 +87,11 @@ public class UserController {
         return userService.getAllUsers();
     }
 
+    @GetMapping("/users/email/{email}")
+    public Boolean isEmailTaken(@PathVariable String email){
+
+      return userService.isEmailPresent(email);
+
+    }
+
 }
