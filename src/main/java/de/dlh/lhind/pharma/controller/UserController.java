@@ -89,9 +89,8 @@ public class UserController {
 
     @GetMapping("/users/email/{email}")
     public Boolean isEmailTaken(@PathVariable String email){
-
-      return userService.isEmailPresent(email);
-
+        System.out.println(email);
+        return userService.isEmailPresent(email);
     }
 
 }
